@@ -1,9 +1,41 @@
-name: Hello World Workflow
-on: push
+name: Manual CI Pipeline
+
+on:
+    workflow_dispatch:
+        inputs:
+            run-tests:
+                type: boolean
+                required: true
+
+            test-type:
+                type: choice
+                options:
+                    - unit
+                    - integration
+                    - all
+                required: true
+
+            environment:
+                type: environment
+                required: true
+
+            build-number:
+                type: number
+                required: false
+
+            message:
+                type: string
+                required: false
 
 jobs:
-    hello-job:
+    build:
         runs-on: ubuntu-latest
+
         steps:
-            - name: Echo text
-              run: echo "Hello, world!"
+            - name: Print Inputs
+              run: |
+                  echo "Run tests: ${{ inputs.run-tests }}"
+                  echo "Test type: ${{ inputs.test-type }}"
+                  echo "Env: ${{ inputs.environment }}"
+                  echo "Build: ${{ inputs.build-number }}"
+                  echo "Message: ${{ inputs.message }}"
